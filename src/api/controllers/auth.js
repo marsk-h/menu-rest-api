@@ -61,5 +61,5 @@ exports.register = async (req, res) => {
     }
   } catch (error) {
     handleError(res, error);
-  }
+  } 
 };
