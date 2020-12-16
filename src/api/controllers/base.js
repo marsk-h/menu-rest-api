@@ -1,4 +1,8 @@
+//const { config } = require('dotenv/types');
 const user = require('../../db/models/universal');
+const jwt = require('jsonwebtoken');
+const config = require('../../config/conf');
+//const bcrypt = require('bcrypt');
 
 exports.emailExists = async (table, field, email) => {
     const found = await user.findOne(table, field, email);
@@ -30,4 +34,38 @@ exports.emailExistsExcludingMySelf = async (table, field, id, email) => {
     }
   }
   return false;
+};
+
+exports.encrypt = user => {
+  jwt.sign({user}, config.jwtSecret, (err, token) => {
+    return token;
+  });
+};
+
+
+/**   Manejador de errores
+ *     errors: {
+ *       message: array[]
+ */
+exports.handleError = (res, err) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(err);
+  }
+  res.status(err.code).json({
+    errors: {
+      message: err.message
+    }
+  });
+};
+
+
+/** return json
+ *   code: statusCode,
+ *   message: [] or string
+ * */ 
+exports.buildErrObject = (code, message) => {
+  return {
+    code,
+    message
+  }
 };

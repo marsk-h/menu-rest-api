@@ -21,6 +21,7 @@ const search = (table, field, value) => {
 };
 
 const saveItem = (table, data) => {
+  console.log(table);
   let query = `INSERT INTO ${table} SET ?`;
   return db(query, data);
 };
